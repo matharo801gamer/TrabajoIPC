@@ -43,13 +43,17 @@
          <center>
             <ScrollPane fx:id="mapScrollPane" fitToHeight="false" fitToWidth="false" pannable="true" style="-fx-background-color: #cccccc;">
                <content>
-                  <Group fx:id="zoomGroup">
+                  <Group>
                      <children>
-                        <Pane fx:id="mapPane">
+                        <Group fx:id="zoomGroup">
                            <children>
-                              <ImageView fx:id="mapView" pickOnBounds="true" preserveRatio="true" />
+                              <Pane fx:id="mapPane">
+                                 <children>
+                                    <ImageView fx:id="mapView" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </Pane>
                            </children>
-                        </Pane>
+                        </Group>
                      </children>
                   </Group>
                </content>

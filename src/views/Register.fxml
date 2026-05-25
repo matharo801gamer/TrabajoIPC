@@ -9,43 +9,33 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER"
-      spacing="15"
-      xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controllers.RegisterController">
-
-    <padding>
-        <Insets top="30" right="40" bottom="30" left="40"/>
-    </padding>
-
-    <Label text="Registro de Usuario"
-           style="-fx-font-size: 24px; -fx-font-weight: bold;" />
-
-    <TextField fx:id="txtNick"
-               promptText="Nickname (6-15 caracteres)" />
-
-    <TextField fx:id="txtEmail"
-               promptText="Correo electrónico" />
-
-    <PasswordField fx:id="txtPassword"
-                   promptText="Contraseña (8-20, mayúscula, minúscula, número y símbolo)" />
-
-    <DatePicker fx:id="dpBirthDate"
-                promptText="Fecha de nacimiento" />
-
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="Seleccionar Avatar (Opcional)"
-                onAction="#selectAvatar" />
-    </HBox>
-
-    <Button text="Registrarse"
-            prefWidth="220"
-            onAction="#handleRegister"
-            style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-
-    <Button text="Ya tengo cuenta / Iniciar sesión"
-            prefWidth="220"
-            onAction="#goToLogin" />
-
+<VBox alignment="CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RegisterController">
+   <padding>
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+   </padding>
+   <children>
+      <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Running la Safor" />
+      <Label style="-fx-font-size: 18px;" text="Registro de Usuario" />
+      
+      <TextField fx:id="txtNick" maxWidth="250.0" prefWidth="250.0" promptText="Nickname" />
+      <TextField fx:id="txtEmail" maxWidth="250.0" prefWidth="250.0" promptText="Correo electronico" />
+      <PasswordField fx:id="txtPassword" maxWidth="250.0" prefWidth="250.0" promptText="Contrasena" />
+      
+      <HBox alignment="CENTER" maxWidth="250.0" prefWidth="250.0" spacing="10.0">
+         <children>
+            <Label text="Nacimiento:" />
+            <DatePicker fx:id="dpBirthDate" prefWidth="170.0" />
+         </children>
+      </HBox>
+      
+      <HBox alignment="CENTER" maxWidth="250.0" prefWidth="250.0" spacing="10.0">
+         <children>
+            <Label text="Avatar (Opcional):" />
+            <Button mnemonicParsing="false" onAction="#selectAvatar" text="Examinar..." />
+         </children>
+      </HBox>
+      
+      <Button mnemonicParsing="false" onAction="#handleRegister" prefWidth="250.0" text="Completar Registro" />
+      <Button mnemonicParsing="false" onAction="#goToLogin" prefWidth="250.0" text="Volver al Login" />
+   </children>
 </VBox>

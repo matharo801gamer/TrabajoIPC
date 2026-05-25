@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" maxWidth="440.0" prefHeight="585.0" prefWidth="324.0" spacing="15.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProfileController">
+<VBox alignment="CENTER" maxWidth="440.0" prefHeight="585.0" prefWidth="324.0" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProfileController">
    <children>
       <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Mi Perfil" />
       <ImageView fx:id="imgAvatar" fitHeight="80.0" fitWidth="80.0" preserveRatio="true" />

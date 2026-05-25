@@ -1,49 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controllers.SessionController"
-      spacing="15"
-      style="-fx-padding: 20; -fx-background-color: white;">
-
-    <Label text="Historial de sesiones"
-           style="-fx-font-size: 24px; -fx-font-weight: bold;" />
-
-    <TableView fx:id="tblSessions" prefHeight="600">
-
+<VBox prefHeight="700.0" prefWidth="900.0" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SessionController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <Label text="Historial de Sesiones">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TableView fx:id="sessionsTable" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <columns>
-
-            <TableColumn fx:id="colStart"
-                         text="Inicio"
-                         prefWidth="180"/>
-
-            <TableColumn fx:id="colEnd"
-                         text="Fin"
-                         prefWidth="180"/>
-
-            <TableColumn fx:id="colDuration"
-                         text="Duración"
-                         prefWidth="120"/>
-
-            <TableColumn fx:id="colImported"
-                         text="Importadas"
-                         prefWidth="120"/>
-
-            <TableColumn fx:id="colViewed"
-                         text="Visualizadas"
-                         prefWidth="130"/>
-
-            <TableColumn fx:id="colAnnotations"
-                         text="Anotaciones"
-                         prefWidth="120"/>
-
+          <TableColumn fx:id="colInicio" prefWidth="160.0" text="Inicio" />
+          <TableColumn fx:id="colFin" prefWidth="160.0" text="Fin" />
+            <TableColumn fx:id="colDuracion" prefWidth="120.0" text="Duración" />
+            <TableColumn fx:id="colImportadas" prefWidth="100.0" text="Importadas" />
+            <TableColumn fx:id="colVistas" prefWidth="100.0" text="Vistas" />
+            <TableColumn fx:id="colAnotaciones" prefWidth="100.0" text="Anotaciones" />
         </columns>
-
-    </TableView>
-
+      </TableView>
+      <VBox spacing="10.0" style="-fx-background-color: #f4f4f4; -fx-padding: 15; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;">
+         <children>
+            <Label text="Totales acumulados">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <GridPane hgap="20.0" vgap="10.0">
+              <columnConstraints>
+                <javafx.scene.layout.ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="170.0" />
+                <javafx.scene.layout.ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <javafx.scene.layout.RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Sesiones totales:" />
+                  <Label text="Actividades importadas:" GridPane.rowIndex="1" />
+                  <Label text="Actividades visualizadas:" GridPane.rowIndex="2" />
+                  <Label text="Anotaciones creadas:" GridPane.rowIndex="3" />
+                  <Label fx:id="lblTotalSesiones" text="0" GridPane.columnIndex="1" />
+                  <Label fx:id="lblTotalImportadas" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="lblTotalVistas" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="lblTotalAnotaciones" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               </children>
+            </GridPane>
+         </children>
+      </VBox>
+   </children>
 </VBox>

@@ -136,6 +136,7 @@ public class MapController implements Initializable {
         mapView.setImage(mapImage);
         mapPane.setPrefSize(mapImage.getWidth(), mapImage.getHeight());
         mapPane.setMinSize(mapImage.getWidth(), mapImage.getHeight());
+        mapPane.setMaxSize(mapImage.getWidth(), mapImage.getHeight());
         currentProjection = new MapProjection(region, mapImage.getWidth(), mapImage.getHeight());
         
         List<TrackPoint> points = activity.getTrackPoints();
@@ -257,7 +258,7 @@ public class MapController implements Initializable {
         if (imgFile != null) {
             System.out.println("Mapa seleccionado: " + imgFile.getCanonicalPath());
             buildMap(imgFile); // Reconstruimos la vista con la nueva imagen
-            mapListView.getItems().clear(); // Borramos los datos del mapa anterior
+            // mapListView no existe en mapPanel.fxml, por lo que causaba un NullPointerException
         }
     }
 

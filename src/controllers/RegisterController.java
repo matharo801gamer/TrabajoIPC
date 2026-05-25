@@ -43,11 +43,9 @@ public class RegisterController {
     private void selectAvatar(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Seleccionar avatar");
-
         chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+                new FileChooser.ExtensionFilter("Imagenes", "*.png", "*.jpg", "*.jpeg")
         );
-
         File file = chooser.showOpenDialog(txtNick.getScene().getWindow());
 
         if (file != null) {
@@ -58,7 +56,6 @@ public class RegisterController {
 
     @FXML
     private void handleRegister(ActionEvent event) {
-
         String nick = txtNick.getText().trim();
         String email = txtEmail.getText().trim();
         String password = txtPassword.getText();
@@ -70,38 +67,32 @@ public class RegisterController {
         }
 
         if (!User.checkNickName(nick)) {
-            showAlert("Error", "Nickname no válido.");
+            showAlert("Error", "Nickname no valido.");
             return;
         }
 
         if (!User.checkEmail(email)) {
-            showAlert("Error", "Email no válido.");
+            showAlert("Error", "Email no valido.");
             return;
         }
 
         if (!User.checkPassword(password)) {
-            showAlert("Error", "Contraseña no válida.");
+            showAlert("Error", "Contrasena no valida.");
             return;
         }
 
         if (!User.isOlderThan(birthDate, 12)) {
-            showAlert("Error", "Debe ser mayor de 12 años.");
+            showAlert("Error", "Debe ser mayor de 12 anos.");
             return;
         }
 
-        boolean ok = app.registerUser(
-                nick,
-                email,
-                password,
-                birthDate,
-                avatarPath
-        );
+        boolean ok = app.registerUser(nick, email, password, birthDate, avatarPath);
 
         if (ok) {
-            showAlert("Éxito", "Usuario registrado correctamente.");
+            showAlert("Exito", "Usuario registrado correctamente.");
             loadScene("/views/Login.fxml");
         } else {
-            showAlert("Error", "No se pudo registrar. Quizá el nickname ya existe.");
+            showAlert("Error", "No se pudo registrar. Quizas el nickname ya existe.");
         }
     }
 
@@ -114,9 +105,8 @@ public class RegisterController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxml));
             Stage stage = (Stage) txtNick.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(root, 1100, 700));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "No se pudo cargar la ventana.");

@@ -2,125 +2,112 @@ package controllers;
 
 import java.net.URL;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
-
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-
 import upv.ipc.sportlib.Session;
 import upv.ipc.sportlib.SportActivityApp;
 import upv.ipc.sportlib.User;
 
 public class SessionController implements Initializable {
 
-    @FXML
-    private TableView<Session> tblSessions;
+    @FXML private TableView<Session> sessionsTable;
+    @FXML private TableColumn<Session, String> colInicio;
+    @FXML private TableColumn<Session, String> colFin;
+    @FXML private TableColumn<Session, String> colDuracion;
+    @FXML private TableColumn<Session, String> colImportadas;
+    @FXML private TableColumn<Session, String> colVistas;
+    @FXML private TableColumn<Session, String> colAnotaciones;
 
-    @FXML
-    private TableColumn<Session, String> colStart;
-
-    @FXML
-    private TableColumn<Session, String> colEnd;
-
-    @FXML
-    private TableColumn<Session, String> colDuration;
-
-    @FXML
-    private TableColumn<Session, Integer> colImported;
-
-    @FXML
-    private TableColumn<Session, Integer> colViewed;
-
-    @FXML
-    private TableColumn<Session, Integer> colAnnotations;
+    @FXML private Label lblTotalSesiones;
+    @FXML private Label lblTotalImportadas;
+    @FXML private Label lblTotalVistas;
+    @FXML private Label lblTotalAnotaciones;
 
     private SportActivityApp app;
+    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         app = SportActivityApp.getInstance();
 
-        User user = app.getCurrentUser();
+        // Configurar el contenido de las columnas
+        colInicio.setCellValueFactory(c -> {
+            LocalDateTime dt = c.getValue().getStartTime();
+            return new SimpleStringProperty(dt != null ? dt.format(dtf) : "");
+        });
 
-        if (user == null) {
-            showError("No hay usuario autenticado.");
-            return;
+        colFin.setCellValueFactory(c -> {
+            LocalDateTime dt = c.getValue().getEndTime();
+            return new SimpleStringProperty(dt != null ? dt.format(dtf) : "");
+        });
+
+        colDuracion.setCellValueFactory(c -> {
+            Duration d = c.getValue().getDuration();
+            if (d == null) return new SimpleStringProperty("");
+            long s = d.getSeconds();
+            return new SimpleStringProperty(String.format("%dh %02dm %02ds", s / 3600, (s % 3600) / 60, (s % 60)));
+        });
+
+        colImportadas.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getImportedActivities())));
+        colVistas.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getViewedActivities())));
+        colAnotaciones.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getAnnotationsCreated())));
+
+        cargarSesionesBackground();
+    }
+    
+    private void cargarSesionesBackground() {
+        // Se usa una Task para realizar el trabajo pesado en segundo plano
+        Task<List<Session>> task = new Task<List<Session>>() {
+            @Override
+            protected List<Session> call() throws Exception {
+                User user = app.getCurrentUser();
+                return app.getSessionsByUser(user);
+            }
+        };
+
+        // Cuando la tarea termina, se actualiza el GUI en el hilo principal
+        task.setOnSucceeded(e -> {
+            List<Session> sesiones = task.getValue();
+            if (sesiones != null) {
+                ObservableList<Session> obsList = FXCollections.observableArrayList(sesiones);
+                sessionsTable.setItems(obsList);
+                calcularTotales(sesiones);
+            }
+        });
+
+        // Lanzar la tarea en un hilo secundario
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
+    }
+
+    private void calcularTotales(List<Session> sesiones) {
+        int tSesiones = sesiones.size();
+        int tImportadas = 0;
+        int tVistas = 0;
+        int tAnotaciones = 0;
+
+        for (Session s : sesiones) {
+            tImportadas += s.getImportedActivities();
+            tVistas += s.getViewedActivities();
+            tAnotaciones += s.getAnnotationsCreated();
         }
 
-        configureTable();
-        loadSessions(user);
-    }
-
-    private void configureTable() {
-
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        colStart.setCellValueFactory(cellData ->
-                javafx.beans.binding.Bindings.createStringBinding(() ->
-                        cellData.getValue().getStartTime().format(formatter)
-                )
-        );
-
-        colEnd.setCellValueFactory(cellData ->
-                javafx.beans.binding.Bindings.createStringBinding(() ->
-                        cellData.getValue().getEndTime().format(formatter)
-                )
-        );
-
-        colDuration.setCellValueFactory(cellData ->
-                javafx.beans.binding.Bindings.createStringBinding(() -> {
-                    Duration d = cellData.getValue().getDuration();
-
-                    long hours = d.toHours();
-                    long minutes = d.toMinutesPart();
-
-                    return hours + "h " + minutes + "m";
-                })
-        );
-
-        colImported.setCellValueFactory(
-                new PropertyValueFactory<>("importedActivities")
-        );
-
-        colViewed.setCellValueFactory(
-                new PropertyValueFactory<>("viewedActivities")
-        );
-
-        colAnnotations.setCellValueFactory(
-                new PropertyValueFactory<>("annotationsCreated")
-        );
-    }
-
-    private void loadSessions(User user) {
-        try {
-
-            List<Session> sessions = app.getSessionsByUser(user);
-
-            tblSessions.setItems(
-                    FXCollections.observableArrayList(sessions)
-            );
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("No se pudo cargar el historial de sesiones.");
-        }
-    }
-
-    private void showError(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
+        lblTotalSesiones.setText(String.valueOf(tSesiones));
+        lblTotalImportadas.setText(String.valueOf(tImportadas));
+        lblTotalVistas.setText(String.valueOf(tVistas));
+        lblTotalAnotaciones.setText(String.valueOf(tAnotaciones));
     }
 }

@@ -28,31 +28,20 @@ public class LoginController {
 
     @FXML
     private void handleLogin(ActionEvent event) {
-
         String nick = txtNick.getText().trim();
         String password = txtPassword.getText();
 
         if (nick.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR,
-                    "Error",
-                    "Debe completar todos los campos.");
+            showAlert("Error", "Debe completar todos los campos.");
             return;
         }
 
         boolean ok = app.login(nick, password);
 
         if (ok) {
-            showAlert(Alert.AlertType.INFORMATION,
-                    "Éxito",
-                    "Login correcto.");
-
-            // TEMPORAL: cargar panel principal
-            loadScene("/views/components/activityPanel.fxml", event);
-
+            loadScene("/views/Main.fxml", event);
         } else {
-            showAlert(Alert.AlertType.ERROR,
-                    "Error",
-                    "Usuario o contraseña incorrectos.");
+            showAlert("Error", "Usuario o contrasena incorrectos.");
         }
     }
 
@@ -64,24 +53,17 @@ public class LoginController {
     private void loadScene(String fxml, ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxml));
-
             Stage stage = (Stage) txtNick.getScene().getWindow();
-
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(root, 1100, 700));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
-
-            showAlert(Alert.AlertType.ERROR,
-                    "Error",
-                    "No se pudo cargar la ventana.");
+            showAlert("Error", "No se pudo cargar la ventana.");
         }
     }
 
-    private void showAlert(Alert.AlertType type, String title, String msg) {
-        Alert alert = new Alert(type);
-
+    private void showAlert(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(msg);

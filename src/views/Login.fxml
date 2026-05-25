@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="controllers.LoginController">
+<VBox alignment="CENTER" spacing="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="controllers.LoginController">
 
     <padding>
         <Insets bottom="30" left="30" right="30" top="30" />
@@ -17,12 +17,12 @@
 
     <Label style="-fx-font-size: 18px;" text="Iniciar Sesión" />
 
-    <TextField fx:id="txtNick" prefWidth="250" promptText="Nickname" />
+    <TextField fx:id="txtNick" maxWidth="250.0" prefWidth="250" promptText="Nickname" />
 
-    <PasswordField fx:id="txtPassword" prefWidth="250" promptText="Contraseña" />
+    <PasswordField fx:id="txtPassword" maxWidth="250.0" prefWidth="250" promptText="Contraseña" />
 
     <Button onAction="#handleLogin" prefWidth="250" text="Entrar" />
 
-    <Button onAction="#goToRegister" prefWidth="250" text="No tienes cuenta/Registrarse" />
+    <Button onAction="#goToRegister" prefWidth="250" text="Registrarse" />
 
 </VBox>
